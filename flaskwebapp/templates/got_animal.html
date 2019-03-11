@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- ファイル選択エリア -->
+<div class="row">
+  <div class="col s10 offset-s1">
+    <form id="upload_img" action="/" method="post" enctype="multipart/form-data">
+      <div class="file-field input-field row">
+        <div class="btn cyan accent-4">
+          <span>File</span>
+          <input type="file" name="file" id="get_animal_file">
+        </div>
+        <div class="file-path-wrapper col s6 m8">
+          <input id="get_animal_textbox" class="file-path validate" type="text" required>
+        </div>
+        <div class="col s2">
+          <button id="get_animal_button" class="btn-large waves-effect waves-light cyan accent-4" form="upload_img" type="submit" value="file">Get
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ローディングアイコン エリア-->
+<div class="center" style="position:relative;">
+  <div id="get_preloader" style="display: none;">
+    <!-- ローディングアイコン START-->
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-green-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+    <!-- ローディングアイコン END -->
+  </div>
+</div>
+
+
+<!-- アニマル図鑑エリア -->
+<div class="row">
+  <!-- アニマル図鑑の画像部分 -->
+  <div class="col s10 offset-s1 m5 offset-m1">
+    <!-- <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: cover;" alt="アップロード画像"> -->
+    <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: contain;" alt="アップロード画像">
+  </div>
+
+
+  <!-- アニマル図鑑の説明部分を表示 -->
+  <div class="col s10 m5 offset-s1 ">
+    <h4 style="margin-top: 0px;"><b>No.{{content['animal_no']}} {{content['animal_name']}}</b></h4>
+    <!-- <h5><b>分類 </b>{{content['animal_type']}}</h5> -->
+    <h5><b>体長 </b>{{content['body_length']}}<b>　重さ </b>{{content['weight']}}</h5>
+
+    <!-- <div class="divider cyan accent-4"></div> -->
+    <h5>{{content['description']}}</h5>
+
+    <!-- <div class="divider cyan accent-4" style="margin-top:10px;"></div> -->
+    <!-- テンプレート内で |safeフィルターを使い変数をsafeにする(HTMLタグを受け取って利用する) -->
+    <h5><b>似ているポケモン　</b>{{ content['animal_a_tag'] | safe }}</h5>
+
+    <div class="divider cyan accent-4" style="margin-top:10px;"></div>
+    <!-- <div class="cyan lighten-3" style="display: inline-block; padding-left: 1rem; padding-right: 1rem;"> -->
+      <h5><i class="far fa-lightbulb icon_margin cyan-text text-accent-4"></i><b>確信度　</b>{{'{:.2%}'.format(confidence)}}</h5>
+    <!-- </div> -->
+  </div>
+</div>
+
+
+<!-- このアニマルを図鑑へ登録するエリア -->
+<div class="row">
+  <div class="col s10 offset-s1">
+
+    <div class="divider blue-grey lighten-2" style="margin-top:10px;margin-bottom:10px;"></div>
+
+    <div class="col s12 m6">
+      <h5><b>図鑑に登録しますか？</b></h5>
+      <p class="supplement_text">※登録した写真は全ユーザに公開されます。</p>
+    </div>
+
+    <!-- <div class="col s12 m6"> -->
+    <form id="register_animal" action="/register" method="post" enctype="multipart/form-data">
+      <div class="col s12 m4">
+        <div class="input-field">
+          <i class="material-icons prefix amber-text text-darken-4">account_circle</i>
+          <input id="input_text" type="text" class="validate" name="register_user_id" data-length="10" maxlength="10" required>
+          <label for="input_text">ニックネーム（必須）</label>
+        </div>
+        <input type="hidden" name="animal_no" value={{content['animal_no']}} >
+        <input type="hidden" name="animal_name" value={{content['animal_name']}} >
+        <input type="hidden" name="confidence" value={{confidence}} >
+      </div>
+      <div class="col s12 m2">
+        <button class="btn waves-effect waves-light amber darken-4 right" style="margin-top:25px;" type="submit" name="register_filepath" value={{file_path}}>登録</button>
+      </div>
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

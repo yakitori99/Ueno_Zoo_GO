@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+  <div class="col s10 offset-s1 about about_text_color">
+
+    <h5 style="margin-top:2rem;"><b>このサイトについて</b></h5>
+    <div class="divider cyan accent-4" style="margin-bottom: 0.5rem;"></div>
+    <p>
+      このサイトでは動物の写真をアップロードすると、その名前と特徴・似ているポケモンを知ることができます。<br>
+      現在は、上野動物園にいる人気の動物10種類が認識可能です。
+    </p>
+
+    <h5 style="margin-top:2rem;"><b>遊び方</b></h5>
+    <div class="divider cyan accent-4" style="margin-bottom: 0.5rem;"></div>
+
+    <h6>アニマルをゲットする</h6>
+    <p>
+      <!-- <a href="/"><i class="fas fa-camera icon_margin"></i><b>Get</b></a>で -->
+      <a href="/"><b>Get</b></a>で
+      動物の写真をアップロードすると、アニマルをゲットできます。<br>
+      （写りが悪いと逃げられてしまうことがあります）
+    </p>
+
+    <h6>アニマル図鑑をみる</h6>
+    <p>
+      <!-- <a href="/my_animal_index"><i class="fas fa-book icon_margin"></i><b>Myアニマル図鑑</b></a>で -->
+      <a href="/my_animal_index"><b>Myアニマル図鑑</b></a>で
+      これまでに図鑑に登録したアニマルを見ることができます。<br>
+      （同じ種類のアニマルを複数登録すると、後で登録したほうが表示されます）<br>
+      目指せアニマルマスター！
+    </p>
+
+    <h6>他の人の写真をみる</h6>
+    <p>
+      <!-- <a href="/public_photos"><i class="fas fa-images icon_margin"></i><b>フォトライブラリ</b></a>で -->
+      <a href="/public_photos"><b>フォトライブラリ</b></a>で
+      他の人がゲットしたアニマルを見ることができます。<br>
+      <!-- また<a href="/my_animal_index"><i class="fas fa-book icon_margin"></i><b>Myアニマル図鑑</b></a>で -->
+      また<a href="/my_animal_index"><b>Myアニマル図鑑</b></a>で
+      他の人のアニマル図鑑も見ることができます。
+    </p>
+
+    <h5 style="margin-top:2rem;"><b>認識できる動物</b></h5>
+    <div class="divider cyan accent-4" style="margin-bottom: 0.5rem;"></div>
+    <p>
+      現在認識できる動物は以下の10種類です。<br>
+      No.001 <a href="https://ueno-zoo.mamakoe.jp/animal/macaca-fuscata/" target="_blank" rel="noopener noreferrer">ニホンザル<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.002 <a href="https://ueno-zoo.mamakoe.jp/animal/ailuropoda-melanoleuca/" target="_blank" rel="noopener noreferrer">パンダ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.003 <a href="https://ueno-zoo.mamakoe.jp/animal/lutra-lutra/" target="_blank" rel="noopener noreferrer">カワウソ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.004 <a href="https://ueno-zoo.mamakoe.jp/animal/gorilla-gorilla/" target="_blank" rel="noopener noreferrer">ゴリラ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.005 <a href="https://ueno-zoo.mamakoe.jp/animal/giraffa-camelopardalis/" target="_blank" rel="noopener noreferrer">キリン<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.006 <a href="https://ueno-zoo.mamakoe.jp/animal/macropus-giganteus/" target="_blank" rel="noopener noreferrer">カンガルー<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.007 <a href="https://ueno-zoo.mamakoe.jp/animal/sumatran-tiger/" target="_blank" rel="noopener noreferrer">スマトラトラ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.008 <a href="https://ueno-zoo.mamakoe.jp/animal/elephas-maximus/" target="_blank" rel="noopener noreferrer">アジアゾウ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.009 <a href="https://ueno-zoo.mamakoe.jp/animal/pheniscus-demersus/" target="_blank" rel="noopener noreferrer">ケープペンギン<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      No.010 <a href="https://ueno-zoo.mamakoe.jp/animal/ailurus-fulgens/" target="_blank" rel="noopener noreferrer">レッサーパンダ<i class="fas fa-external-link-alt icon_margin_left"></i></a><br>
+      <br>
+      （リンク先は上野動物園のサイトです。動物の生態・園内の居場所などがわかります。）
+    </p>
+
+    <h5 style="margin-top:2rem;"><b>うまく認識させるには</b></h5>
+    <div class="divider cyan accent-4" style="margin-bottom: 0.5rem;"></div>
+    <p>
+      画像の認識・分類はAIが自動で行いますが、残念ながら認識精度は100%ではありません。<br>
+      以下を満たすとうまく認識されやすいです。<br>
+      ・余計なものが写り込まないようにする<br>
+      ・正面または側面から撮る<br>
+      ・鮮明に撮る
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Selectエリア -->
+<div class="row">
+  <div class="input-field col s9 offset-s1 m5 offset-m1 l3 offset-l1" style="margin-top:25px;">
+    <!-- onchangeイベントで、指定されたURLへジャンプ -->
+    <select onchange="location.href = this[this.selectedIndex].value;">
+      <option value="" disabled selected>ニックネームを選択</option>
+      {% for user_name in user_names %}
+        <option value="my_animal_index/{{user_name}}">{{user_name}}</option>
+      {% endfor %}
+    </select>
+    <label>アニマル図鑑を見る</label>
+  </div>
+</div>
+<!-- </div> -->
+{% endblock %}

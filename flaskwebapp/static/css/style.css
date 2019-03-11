@@ -1,0 +1,143 @@
+/* HTML要素 -------------------------------------------------------------------------------- */
+/* 全体のフォントサイズをレスポンシブ対応 */
+html {
+  font-size: calc(50% + 0.5vw);
+}
+
+/* ナビゲーションバーのリンク */
+nav ul a {
+  font-size: 1.2rem;
+}
+/* ナビゲーションバーのアイコン */
+nav ul i {
+  font-size: 1.2rem;
+}
+
+/* mediaがscreenの場合：brand-logoが左寄せで表示されるので左にマージンを設定 */
+/* 上記以外の場合　　　：brand-logoが左右中央に表示されるのでマージンなしとする */
+@media only screen and (min-width: 992px) {
+  nav .brand-logo {
+    margin-left: 5%;
+  }
+}
+
+
+/* id -------------------------------------------------------------------------------- */
+/* GETボタン押下から、classify_img画面への遷移前までの間のプリローダー（ローディング中のアイコン） */
+/* …画像のアップロード + Azure Custom Vision API から戻り値を受け取る、までで長時間かかるのでここだけ特別に表示する。*/
+#get_preloader {
+  /* 親要素の中央　かつ　最前面に表示 */
+  /* 親要素は、position:static(初期値)以外のposition:relative;、potision:absolute;やposition:fixed;を指定してください。 */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+
+
+/* class -------------------------------------------------------------------------------- */
+/* 補足・注意事項のテキスト */
+.supplement_text {
+  font-size: 80%;
+  color: silver;
+}
+
+/* アイコンと文字の間のマージン */
+.icon_margin {
+  margin-right: 0.5rem !important;
+}
+/* アイコンと文字の間のマージン 左 */
+.icon_margin_left {
+  margin-left: 0.5rem !important;
+}
+
+/* Aboutページの説明文章用 */
+.about_text_color{
+  color: #444444;
+}
+.about h6{
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+.about a{
+  text-decoration: underline;
+}
+.about p{
+  font-size: 1.2rem;
+}
+
+
+
+/* アコーディオン用 START -------------------------------------------------------------------------------- */
+/*ボックス全体*/
+/* .accbox {
+    margin: 2em 0;
+    padding: 0;
+} */
+
+/*ラベル*/
+.accbox label {
+    display: block;
+    padding : 13px 12px;
+    color: rgba(0,0,0,0.7);
+    font-size: 1.64rem;
+    font-weight: bold;
+    border-bottom: solid 1px #dddddd;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+/*アイコンを表示*/
+.accbox label:before {
+    content: '\f105';
+    font-family: 'Font Awesome 5 Free';
+    padding-right: 8px;
+}
+
+/*ラベルホバー時*/
+.accbox label:hover {
+    /* background: rgb(0,184,212,0.4) */
+    background: #4dd0e1; /*= cyan lighten-2*/
+}
+
+/*チェックは隠す*/
+.accbox input {
+    display: none;
+}
+
+/*中身を非表示にしておく*/
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/*クリックで中身表示*/
+.cssacc:checked + label + .accshow {
+    height: auto;
+    border-bottom: solid 1px #dddddd;
+    opacity: 1;
+    padding-bottom: 1rem;
+}
+
+.accbox .accshow p {
+    margin: 15px 10px
+}
+
+/*開いているアコーディオンのアイコンを入れ替える*/
+.cssacc:checked + label:before {
+    content: '\f107';
+}
+
+/*開いているアコーディオンのラベル*/
+.cssacc:checked + label {
+    background: #80deea; /*= cyan lighten-3*/
+}
+/* アコーディオン用 END -------------------------------------------------------------------------------- */

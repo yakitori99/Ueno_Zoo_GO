@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- ファイル選択エリア -->
+<div class="row">
+  <div class="col s10 offset-s1">
+    <form id="upload_img" action="/" method="post" enctype="multipart/form-data">
+      <div class="file-field input-field row">
+        <div class="btn cyan accent-4">
+          <span>File</span>
+          <input type="file" name="file" id="get_animal_file">
+        </div>
+        <div class="file-path-wrapper col s6 m8">
+          <input id="get_animal_textbox" class="file-path validate" type="text" required style="font-size: 1rem;" placeholder="動物の写真を選択　または　ドラッグ＆ドロップしてください">
+        </div>
+        <div class="col s2">
+          <button id="get_animal_button" class="btn-large waves-effect waves-light cyan accent-4" form="upload_img" type="submit" value="file">Get
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ローディングアイコン エリア-->
+<div class="center" style="position:relative;">
+  <div id="get_preloader" style="display: none;">
+    <!-- ローディングアイコン START-->
+    <div class="preloader-wrapper big active">
+      <div class="spinner-layer spinner-green-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+    <!-- ローディングアイコン END -->
+  </div>
+</div>
+
+{% endblock %}

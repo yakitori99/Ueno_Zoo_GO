@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!--Import Font-awewome-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+  <!-- Import jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <!-- おしゃれなメッセージダイアログ表示用 …sweetalert1はやめて、2を使う -->
+  <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.33.1/sweetalert2.all.min.js"></script>
+
+
+  <!--Import materialize.css-->
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- favicon.ico -->
+  <link rel="shortcut icon" href="/static/favicon.ico">
+
+  <script src="/static/js/script.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+  <meta charset="utf-8">
+  <title>Ueno Zoo GO</title>
+</head>
+
+<body>
+ <div class="row">
+
+    <nav class="nav-extended cyan accent-4">
+      <div class="nav-wrapper">
+        <!-- <a href="/" class="brand-logo left" style="margin-left: 20px;">UENO ZOO GO</a> -->
+        <!-- <a href="/" class="brand-logo left col offset-s1">UENO ZOO GO</a> -->
+        <!-- <a href="/" class="brand-logo left col offset-s1"><i class="fas fa-paw icon_margin"></i>UENO ZOO GO</a> -->
+          <!-- <a href="/" class="brand-logo left"  style="margin-left: 5%;"> -->
+          <a href="/" class="brand-logo">
+            <i class="fas fa-paw icon_margin" style="line-height: inherit;"></i>Ueno Zoo GO
+          </a>
+
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style="margin-right: 5%;">
+          <li><a href="/"><i class="fas fa-camera icon_margin"></i>Get</a></li>
+          <li><a href="/my_animal_index"><i class="fas fa-book icon_margin"></i>Myアニマル図鑑</a></li>
+          <li><a href="/public_photos"><i class="fas fa-images icon_margin"></i>フォトライブラリ</a></li>
+          <!-- <li><a href="javascript:void(0)"><i class="far fa-question-circle fa-lg icon_margin" onclick="globalHelpClick()"></i>About</a></li> -->
+          <li><a href="/about"><i class="far fa-question-circle icon_margin"></i>About</a></li>
+        </ul>
+      </div>
+    </nav>
+    <ul class="sidenav" id="mobile-demo">
+      <li><a href="/"><i class="fas fa-camera icon_margin"></i>Get</a></li>
+      <li><a href="/my_animal_index"><i class="fas fa-book icon_margin"></i>Myアニマル図鑑</a></li>
+      <li><a href="/public_photos"><i class="fas fa-images icon_margin"></i>フォトライブラリ</a></li>
+      <!-- <li><a href="javascript:void(0)"><i class="far fa-question-circle fa-lg icon_margin" onclick="globalHelpClick()"></i>About</a></li> -->
+      <li><a href="/about"><i class="far fa-question-circle icon_margin"></i>About</a></li>
+    </ul>
+
+    {% block content %}
+    {% endblock %}
+
+ </div>
+
+ <!-- toast(≒メッセージウインドウ)表示  ※toast_jsは存在しなくてもエラーにはならない -->
+ <script type="text/javascript">
+   // HTMLを最後まで（画像まで全て）読み終わってから実行する処理
+   window.onload = function() {
+     {{toast_js | safe }}
+   }
+ </script>
+
+</body>
+</html>

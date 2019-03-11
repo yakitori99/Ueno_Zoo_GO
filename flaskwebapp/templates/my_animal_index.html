@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Selectエリア -->
+<div class="row">
+  <div class="input-field col s9 offset-s1 m5 offset-m1 l3 offset-l1" style="margin-top:25px;">
+    <!-- onchangeイベントで、指定されたURLへジャンプ。script.jsで、前回選択されたvalueを初期選択する -->
+    <select id="user_name_selecter" onchange="location.href = this[this.selectedIndex].value;">
+      <option value="" disabled>ニックネームを選択</option>
+      {% for user_name in user_names %}
+        <option value="{{user_name}}">{{user_name}}</option>
+      {% endfor %}
+    </select>
+    <label>アニマル図鑑を見る</label>
+    <input type="hidden" id="selected_user_name" value="{{selected_user_name}}" >
+  </div>
+</div>
+
+<!-- アニマル図鑑表示 -->
+<div class="accbox">
+{% for dict_animal, my_animal in animals_data %}
+  <!-- アニマル図鑑のアニマルNo, アニマル名 -->
+  <input type="checkbox" id="{{dict_animal['animal_no']}}" class="cssacc" />
+  <label for="{{dict_animal['animal_no']}}" style="margin-left:5%; margin-right:5%; margin-top: 0px; margin-bottom: 0px;">
+    <!-- 登録がまだなら未チェック、登録済はチェックのアイコンを表示 -->
+    {% if my_animal['timestamp'] == 'No Data' %}
+      <i class="far fa-square"></i>
+    {% else %}
+      <i class="far fa-check-square"></i>
+    {% endif %}
+
+    <b>No.{{dict_animal['animal_no']}} {{dict_animal['animal_name']}}</b>
+  </label>
+
+  <!-- アコーディオンでクリック時に表示させる部分 START -->
+  <div class="row accshow" style="margin-left:5%; margin-right:5%;">
+    <!-- アニマル図鑑の画像部分 START -->
+    <div class="col s12 m6 l5">
+      <div class="card">
+        <div class="card-image waves-block waves-light">
+          <!-- <img src="{{my_animal['filepath']}}" style="width: 100%; height: 300px; max-height: 60vw; object-fit: cover;"> -->
+          <img src="{{my_animal['filepath']}}" style="width: 100%; height: 300px; max-height: 60vw; object-fit: contain;">
+        </div>
+      </div>
+    </div><!-- アニマル図鑑の画像部分 END -->
+    <!-- アニマル図鑑の説明部分を表示 START -->
+    <div class="col s12 m6 l7">
+      <!-- 体長　重さ -->
+      {% if my_animal['timestamp'] == 'No Data' %}
+        <h5><b>体長 </b>？？？<b>　重さ </b>？？？</h5>
+      {% else %}
+        <h5><b>体長 </b>{{dict_animal['body_length']}}<b>　重さ </b>{{dict_animal['weight']}}</h5>
+      {% endif %}
+
+      <!-- 概要　その他 -->
+      {% if my_animal['timestamp'] == 'No Data' %}
+        <h5></h5>
+      {% else %}
+        <h5>{{dict_animal['description']}}</h5>
+
+        <h5><b>ゲットした日　</b>{{my_animal['timestamp']}}</h5>
+        <h5><b>似ているポケモン　</b>{{ dict_animal['animal_a_tag'] | safe }}</h5>
+        <h5><i class="far fa-lightbulb icon_margin cyan-text text-accent-4"></i><b>確信度　</b>{{my_animal['confidence']}}</h5>
+      {% endif %}
+
+    </div><!-- アニマル図鑑の説明部分を表示 END -->
+  </div><!-- アコーディオンでクリック時に表示させる部分 END -->
+{% endfor %}
+</div><!--//.accbox-->
+{% endblock %}
