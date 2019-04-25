@@ -3,4 +3,4 @@ Jinja2==2.9.6
 Werkzeug==0.12.1
 Pillow==5.1.0
 opencv-python==3.3.1.11
-sqlalchemy==1.1.5 
+sqlalchemy==1.1.5
