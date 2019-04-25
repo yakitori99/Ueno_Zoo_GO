@@ -1,6 +1,7 @@
 ## Dockerfileには、ベースとするDockerイメージに対して実行する内容を記述します。
 # FROMで、ベースとするDockerイメージを指定します。
-FROM kikagaku/handson:v3.0
+#FROM kikagaku/handson:v3.0
+FROM tiangolo/uwsgi-nginx:python3.6
 
 
 # RUNは、OSのコマンドを実行する際に使用します。
@@ -35,3 +36,4 @@ EXPOSE 5000 2222
 
 # ENTRYPOINT はコンテナが実行するファイルを設定します。
 ENTRYPOINT ["init.sh"]
+#SHELL ["/bin/bash", "-c"] # 開発・デバッグ用。コンテナ起動時にWebアプリを起動しないので注意。
