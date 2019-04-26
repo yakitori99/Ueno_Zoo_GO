@@ -1,18 +1,4 @@
-//// 共通
-/// materialize css の各種機能を有効化
-// with jQuery
-$(document).ready(function(){
-  /// sidenav有効化
-  $('.sidenav').sidenav();
-  /// リアルタイムで文字数カウントするテキストボックスを有効化
-  $('input#input_text, textarea#textarea2').characterCounter();
-  /// select(≒ドロップダウンリスト)を有効化
-  $('select').formSelect();
-});
-
-//// メニューバー
-
-
+///// Native javascript
 //// 個別ページ
 /// escapedページで、ゲットするには[?]クリック時のメッセージ表示
 function howToGetClick() {
@@ -73,7 +59,20 @@ document.addEventListener( 'DOMContentLoaded' , function( e ) {
 /// my_animal_indexページで、選択されたvalueを初期選択する END
 
 
-$(function() {
+
+
+//// jQuery
+$(document).ready(function(){
+  ///// materialize css の各種機能を有効化
+  /// sidenav有効化
+  $('.sidenav').sidenav();
+  /// リアルタイムで文字数カウントするテキストボックスを有効化
+  $('input#input_text, textarea#textarea2').characterCounter();
+  /// select(≒ドロップダウンリスト)を有効化
+  $('select').formSelect();
+
+
+  ///// 自作function
   /// GETボタン押下時
   $("#get_animal_button").on('click', function() {
     var file_list = document.getElementById("get_animal_file").files;
