@@ -60,13 +60,15 @@ nav ul i {
 }
 .about h6{
   font-weight: bold;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 .about a{
   text-decoration: underline;
 }
 .about p{
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  margin-block-start: 0.3em;
+  margin-block-end: 0.3em;
 }
 
 /* メダル、トロフィー、リボンの色 */
