@@ -55,19 +55,14 @@
   <!-- アニマル図鑑の説明部分を表示 -->
   <div class="col s10 m5 offset-s1 ">
     <h4 style="margin-top: 0px;"><b>No.{{content['animal_no']}} {{content['animal_name']}}</b></h4>
-    <!-- <h5><b>分類 </b>{{content['animal_type']}}</h5> -->
     <h5><b>体長 </b>{{content['body_length']}}<b>　重さ </b>{{content['weight']}}</h5>
 
-    <!-- <div class="divider cyan accent-4"></div> -->
     <h5>{{content['description']}}</h5>
 
-    <!-- <div class="divider cyan accent-4" style="margin-top:10px;"></div> -->
     <!-- テンプレート内で |safeフィルターを使い変数をsafeにする(HTMLタグを受け取って利用する) -->
     <h5><b>似ているポケモン　</b>{{ content['animal_a_tag'] | safe }}</h5>
 
-    <div class="divider cyan accent-4" style="margin-top:10px;"></div>
-    <!-- <div class="cyan lighten-3" style="display: inline-block; padding-left: 1rem; padding-right: 1rem;"> -->
-      <h5><i class="far fa-lightbulb icon_margin cyan-text text-accent-4"></i><b>確信度　</b>{{'{:.2%}'.format(confidence)}}</h5>
+    <h5><i class="far fa-lightbulb icon_margin cyan-text text-accent-4"></i><b>確信度 </b>{{'{:.2%}'.format(confidence)}}</h5>
     <!-- </div> -->
   </div>
 </div>

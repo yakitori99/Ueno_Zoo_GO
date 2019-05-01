@@ -58,6 +58,11 @@ nav ul i {
 .about_text_color{
   color: #444444;
 }
+.about h5{
+  border-bottom: 0.5px solid #00b8d4;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
 .about h6{
   font-weight: bold;
   font-size: 1.5rem;
