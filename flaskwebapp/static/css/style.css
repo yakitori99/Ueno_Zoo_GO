@@ -69,6 +69,22 @@ nav ul i {
   font-size: 1.2rem;
 }
 
+/* メダル、トロフィー、リボンの色 */
+.medal_bronze{
+  color: #e79974;
+}
+.medal_silver{
+  color: #d4d9dc;
+}
+.medal_gold{
+  color: #F4EE5B;
+}
+.trophy_color{
+  color: #f2e941;
+}
+.ribbon_color{
+  color: #ef7973;
+}
 
 
 /* アコーディオン用 START -------------------------------------------------------------------------------- */
@@ -136,8 +152,8 @@ nav ul i {
     content: '\f107';
 }
 
-/*開いているアコーディオンのラベル*/
-.cssacc:checked + label {
-    background: #80deea; /*= cyan lighten-3*/
-}
+/*開いているアコーディオンのラベル cyan lighten-3*/
+/* .cssacc:checked + label {
+    background: #80deea;
+} */
 /* アコーディオン用 END -------------------------------------------------------------------------------- */

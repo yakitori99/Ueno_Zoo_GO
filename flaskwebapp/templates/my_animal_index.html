@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Selectエリア -->
-<div class="row">
-  <div class="input-field col s9 offset-s1 m5 offset-m1 l3 offset-l1" style="margin-top:25px;">
+<!-- Select, 捕まえた数 & medalエリア -->
+<div class="row"  style="margin-top:25px; margin-left:5%; margin-right:5%;">
+  <!-- Selectエリア -->
+  <div class="input-field col s10 m4 l4">
     <!-- onchangeイベントで、指定されたURLへジャンプ。script.jsで、前回選択されたvalueを初期選択する -->
     <select id="user_name_selecter" onchange="location.href = this[this.selectedIndex].value;">
       <option value="" disabled>ニックネームを選択</option>
@@ -14,6 +15,32 @@
     <label>アニマル図鑑を見る</label>
     <input type="hidden" id="selected_user_name" value="{{selected_user_name}}" >
   </div>
+
+  <!-- 捕まえた数 & medalエリア -->
+  <div class="col s12 m7 offset-m1 l7 offset-l1">
+    <h5>
+      <b style="margin-right:3%;">捕まえた数:{{str_num_animal}}</b>
+      <!-- medal : 2以上でbronze, 4以上でsilver, 6以上でgold, 10でアニマルマスター（トロフィー） -->
+      {% if(   num_got_animal >= 2 and num_got_animal < 4) %}
+        <i class="fas fa-medal fa-lg medal_bronze"></i>
+      {% elif( num_got_animal >= 4 and num_got_animal < 6) %}
+        <i class="fas fa-medal fa-lg medal_bronze"></i>
+        <i class="fas fa-medal fa-lg medal_silver"></i>
+      {% elif( num_got_animal >= 6 and num_got_animal < 10) %}
+        <i class="fas fa-medal fa-lg medal_bronze"></i>
+        <i class="fas fa-medal fa-lg medal_silver"></i>
+        <i class="fas fa-medal fa-lg medal_gold"></i>
+      {% elif( num_got_animal == 10 ) %}
+        <i class="fas fa-medal fa-lg medal_bronze"></i>
+        <i class="fas fa-medal fa-lg medal_silver"></i>
+        <i class="fas fa-medal fa-lg medal_gold"></i>
+        <i class="fas fa-ribbon fa-lg ribbon_color" style="margin-left:1%;"></i>
+        <i class="fas fa-trophy fa-lg trophy_color"></i>
+        <i class="fas fa-ribbon fa-lg ribbon_color"></i>
+      {% endif %}
+    </h5>
+  </div>
+
 </div>
 
 <!-- アニマル図鑑表示 -->

@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Selectエリア -->
-<div class="row">
-  <div class="input-field col s9 offset-s1 m5 offset-m1 l3 offset-l1" style="margin-top:25px;">
+<!-- Select, 捕まえた数 & medalエリア -->
+<div class="row"  style="margin-top:25px; margin-left:5%; margin-right:5%;">
+  <!-- Selectエリア -->
+  <div class="input-field col s10 m4 l4">
     <!-- onchangeイベントで、指定されたURLへジャンプ -->
     <select onchange="location.href = this[this.selectedIndex].value;">
       <option value="" disabled selected>ニックネームを選択</option>

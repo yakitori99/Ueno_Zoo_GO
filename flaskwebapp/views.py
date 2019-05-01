@@ -35,6 +35,7 @@ from flaskwebapp.flaski.models import animal_dict, registered_animal
 
 import flaskwebapp.logger as logger  # for test
 log = logger.Logger('test_log')  # for test
+# log.debug('test_debug_log')  # for debug
 
 
 ### 定数定義
@@ -363,6 +364,18 @@ def my_animal_index(selected_user_name=None):
                                                                                 selected_user_name)
         my_animals.append(my_animal)
 
+    ## (捕まえた数)/(アニマル全種類数)の文字列を生成
+    # my_animalsリスト（中身は辞書）から、timestampだけのリストを生成 # リスト内包表記とgetメソッドで、任意のキーの値を抽出してリスト化
+    timestamp_list = [my_animal.get('timestamp') for my_animal in my_animals]
+    # アニマル全種類数
+    num_all_animal = len(timestamp_list)
+    # 捕まえた数
+    num_got_animal = num_all_animal - timestamp_list.count("No Data")
+    # (捕まえた数)/(アニマル全種類数)の文字列
+    str_num_animal = str(num_got_animal) + "/" + str(num_all_animal)
+    # log.debug(my_animals)  # debug
+    # log.debug(num_got_animal)  # debug
+
     ## user_namesのselectリスト生成用データ
     # 重複を除いてユーザ名(register_user_id)を全て取得し、リストへ格納
     user_names = get_distinct_user_names()
@@ -376,6 +389,7 @@ def my_animal_index(selected_user_name=None):
 
     return render_template('my_animal_index.html',
                            animals_data=zip(dict_animals, my_animals),
+                           str_num_animal=str_num_animal, num_got_animal=num_got_animal,
                            user_names=user_names, selected_user_name=selected_user_name,
                            toast_js=toast_js)
 
