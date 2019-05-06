@@ -120,11 +120,19 @@ nav ul i {
     padding-right: 8px;
 }
 
-/*ラベルホバー時*/
-.accbox label:hover {
-    /* background: rgb(0,184,212,0.4) */
+/*ラベルホバー or タッチ時 START--------*/
+/* .mouseと.touch（マウスデバイスかタッチデバイスか）の判定は
+userAgentChecker.jsが行って、htmlタグのclassへ追加してくれる */
+/*ラベルホバー時(マウスデバイスオンリー、PC用)*/
+.mouse .accbox label:hover {
     background: #4dd0e1; /*= cyan lighten-2*/
 }
+
+/*ラベルタッチ時(タッチデバイスオンリー、スマホorタブレット用)*/
+.touch .accbox label:active {
+    background: #4dd0e1; /*= cyan lighten-2*/
+}
+/*ラベルホバー or タッチ時 END----------*/
 
 /*チェックは隠す*/
 .accbox input {
