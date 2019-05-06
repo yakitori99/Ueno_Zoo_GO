@@ -240,8 +240,20 @@ def get_one_registered_animal_by_animal_no_and_register_user_id(animal_no, user_
 
 
 ### URLアクセス時の処理定義
+## / (Home)
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+
+## /about
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 ## / (get_animal)
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/get', methods=['GET', 'POST'])
 def get_animal():
     if request.method == 'POST':
         # HTTPリクエストから、input type="file" のオブジェクト（ファイルデータの入った辞書）を取り出す
@@ -412,12 +424,6 @@ def public_photos():
 
     # log.debug(file_paths) # debug
     return render_template('public_photos.html', file_paths=file_paths)
-
-
-## About
-@app.route('/about')
-def about():
-    return render_template('about.html')
 
 
 ## error handling 500(Internal Server Error)
