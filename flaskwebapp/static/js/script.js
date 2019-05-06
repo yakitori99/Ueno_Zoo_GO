@@ -38,7 +38,7 @@ function howToGetClick() {
 
 
 /// my_animal_indexページで、選択されたvalueを初期選択する START
-function setPulldown(v){
+function setPulldown_my_animal_index(v){
    var pulldown_option = document.getElementById('user_name_selecter').getElementsByTagName('option');
 
    for(i=0; i<pulldown_option.length;i++){
@@ -53,12 +53,32 @@ document.addEventListener( 'DOMContentLoaded' , function( e ) {
   var selected_user_name_object = document.getElementById('selected_user_name');
   if(selected_user_name_object !== null){
     var selected_user_name = selected_user_name_object.value;
-    setPulldown(selected_user_name);
+    setPulldown_my_animal_index(selected_user_name);
   }
 }, false );
 /// my_animal_indexページで、選択されたvalueを初期選択する END
 
 
+/// photo_library_showページで、選択されたvalueを初期選択する START
+function setPulldown_photo_library_show(v){
+   var pulldown_option = document.getElementById('animal_no_selecter').getElementsByTagName('option');
+
+   for(i=0; i<pulldown_option.length;i++){
+     if(pulldown_option[i].value == v){
+       pulldown_option[i].selected = true;
+       break;
+     }
+   }
+}
+
+document.addEventListener( 'DOMContentLoaded' , function( e ) {
+  var selected_animal_no_object = document.getElementById('selected_animal_no');
+  if(selected_animal_no_object !== null){
+    var selected_animal_no = selected_animal_no_object.value;
+    setPulldown_photo_library_show(selected_animal_no);
+  }
+}, false );
+/// photo_library_showページで、選択されたvalueを初期選択する END
 
 
 //// jQuery

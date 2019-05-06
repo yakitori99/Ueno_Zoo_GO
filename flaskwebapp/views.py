@@ -239,6 +239,32 @@ def get_one_registered_animal_by_animal_no_and_register_user_id(animal_no, user_
     return mydict
 
 
+def get_registered_animals_by_animal_no(animal_no):
+    '''
+    registered_animal からanimal_noを条件にデータを検索し、
+    timestampの降順にソートして、辞書をリストに格納してリストを返す
+    ※検索結果が0件の場合はとりあえず考慮しない（初期データとして、必ず1アニマル1件以上登録するため）
+    [in1] :animal_no
+    [out] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    '''
+    records = db_session.query(registered_animal
+                               ).filter(text('animal_no = :animal_no')
+                                        ).params(animal_no=animal_no
+                                                 ).order_by(desc(registered_animal.timestamp))
+
+    contents = []  # このリストの各行に、registered_animalの辞書型データを入れる
+    for record in records:
+        mydict = {}
+        mydict.setdefault('register_user_id', record.register_user_id)
+        mydict.setdefault('filepath',         record.filepath)
+        mydict.setdefault('confidence',       '{:.2%}'.format(record.confidence))
+        mydict.setdefault('animal_no',        record.animal_no)
+        mydict.setdefault('timestamp',        record.timestamp.strftime('%Y/%m/%d'))
+        contents.append(mydict)
+
+    return contents
+
+
 ### URLアクセス時の処理定義
 ## / (Home)
 @app.route('/')
@@ -406,7 +432,33 @@ def my_animal_index(selected_user_name=None):
                            toast_js=toast_js)
 
 
-## publoc photos
+### フォトライブラリ　アニマル選択
+@app.route('/photo_library')
+def photo_library_search():
+    ## animalsのselectリスト生成用データ
+    # animal_dictのリストを取得
+    dict_animals = get_animal_dict_order_by_animal_no()
+
+    return render_template('photo_library_search.html', dict_animals=dict_animals)
+
+
+### フォトライブラリ　アニマル表示
+@app.route('/photo_library/<selected_animal_no>')
+def photo_library_show(selected_animal_no=None):
+    ## animalsのselectリスト生成用データ
+    # animal_dictのリストを取得
+    dict_animals = get_animal_dict_order_by_animal_no()
+
+    # URLの末尾(/より後ろ)からselected_animal_no（アニマルNo）を取得
+    # アニマルNoをキーにでregistered_animalテーブルを検索
+    registered_animals = get_registered_animals_by_animal_no(selected_animal_no)
+
+    return render_template('photo_library_show.html',
+                           dict_animals=dict_animals, registered_animals=registered_animals,
+                           selected_animal_no=selected_animal_no)
+
+
+## publoc photos（メニューにはない、隠しページとする）
 @app.route('/public_photos')
 def public_photos():
     file_paths = []
