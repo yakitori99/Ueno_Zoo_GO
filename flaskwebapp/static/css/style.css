@@ -100,6 +100,10 @@ nav ul i {
 .card a{
   text-decoration: underline;
 }
+.card .card-image{
+  text-align: center; /*左右中央*/
+  vertical-align: middle; /*上下中央*/
+}
 
 .card-content-left{
   text-align: left;  /* 文章を左寄せする ※デフォルトだがあえて明記 */
@@ -108,9 +112,42 @@ nav ul i {
 .card-content-right{
   text-align: right;  /* 文章を右寄せする */
 }
-
-
 /* cardレイアウト用 END ------------------------------------------------------------------- */
+
+
+/* modal表示用 START ------------------------------------------------------------------- */
+.modal .modal-content {
+    padding: 0px;
+    text-align: center; /*左右中央*/
+    vertical-align: middle; /*上下中央*/
+}
+
+.modal {
+  max-height: 72vh;
+  width: auto;
+  max-width: 80%;
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 2px;
+}
+.modal img{
+  width: auto;
+  height: auto;
+  max-width: 78vw;
+  max-height: 70vh;
+  object-fit: contain;
+  border-radius: 2px;
+}
+@media only screen and (max-width: 992px) {
+  .modal {
+    max-width: 98%;
+  }
+  .modal img{
+    max-width: 95vw;
+  }
+}
+
+/* modal表示用 END ------------------------------------------------------------------- */
+
 
 /* アコーディオン用 START -------------------------------------------------------------------------------- */
 /*ボックス全体*/

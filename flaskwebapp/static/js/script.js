@@ -90,6 +90,8 @@ $(document).ready(function(){
   $('input#input_text, textarea#textarea2').characterCounter();
   /// select(≒ドロップダウンリスト)を有効化
   $('select').formSelect();
+  /// modalウインドウ表示を有効化
+  $('.modal').modal();
 
 
   ///// 自作function

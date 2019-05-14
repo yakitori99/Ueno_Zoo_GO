@@ -255,6 +255,7 @@ def get_registered_animals_by_animal_no(animal_no):
     contents = []  # このリストの各行に、registered_animalの辞書型データを入れる
     for record in records:
         mydict = {}
+        mydict.setdefault('id',               record.id)
         mydict.setdefault('register_user_id', record.register_user_id)
         mydict.setdefault('filepath',         record.filepath)
         mydict.setdefault('confidence',       '{:.2%}'.format(record.confidence))
