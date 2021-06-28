@@ -12,8 +12,9 @@ import glob
 # 画像操作用
 import cv2
 
-# Azure Custom Vision API用
-import http.client
+# for GOOGLE_CLOUD_VISION_API
+import requests
+import base64
 import json
 
 # ランダム文字列生成用
@@ -24,7 +25,7 @@ import string
 from sqlalchemy import desc, distinct, text
 
 ## ローカルライブラリをimport
-# __init.pyのapp(flaskオブジェクト)をimport
+# __init__.pyのapp(flaskオブジェクト)をimport
 from flaskwebapp import app
 
 from flaskwebapp.flaski.database import db_session
@@ -39,61 +40,76 @@ import flaskwebapp.config as conf
 ### 設定読み込み
 # ファイルアップロード先フォルダ
 UPLOAD_FOLDER = conf.UPLOAD_FOLDER
-
+# NO IMAGEのファイルパス
+NO_IMAGE_PATH = conf.NO_IMAGE_PATH
 # アップロードを許可する拡張子
 ALLOWED_EXTENSIONS = conf.ALLOWED_EXTENSIONS
 
-## Azure Custom Vision API用  start
-# Custom Vision APIのtagNameと表示するanimalNoの紐付け用辞書
-labels_for_CV = conf.labels_for_CV
-headers = conf.headers
-params = conf.params
-## Azure Custom Vision API用  end
+# getするしきい値
+SCORE_THRESH = conf.SCORE_THRESH
 
-### グローバル処理
-# 共通処理はグローバルで行う
-# 関数内で読み込むと、処理のたびにメモリにロードすることになりボトルネックになるため。
+# animal_name:animal_no(3桁)
+ANIMAL_NAME_NO_DICT = conf.ANIMAL_NAME_NO_DICT
+
+## for GoogleCloudVisionAPI start
+GOOGLE_CLOUD_VISION_API_URL = conf.GOOGLE_CLOUD_VISION_API_URL
+GCV_API_KEY = conf.GCV_API_KEY
+# GOOGLE_CLOUD_VISION_APIのdetectionのtype, 結果jsonのkey名称
+GCV_DETECTION_TYPE = conf.GCV_DETECTION_TYPE
+GCV_DETECTION_RESULT_NAME = conf.GCV_DETECTION_RESULT_NAME
+# APIから取得する最大数
+GCV_API_NUM_MAX_RESULTS = conf.GCV_API_NUM_MAX_RESULTS
+## for GoogleCloudVisionAPI end
 
 
 ### 関数定義
-def infer_by_custom_vision(filepath):
+def convert_file_to_b64_string(file_path):
     '''
-    画像ファイルを受け取り、Azure Custom Vision APIを用いて、animalsの推論を行う関数
-    [in]   :画像のファイルパス
-    [out1] :推論結果のprobability（確信度） :float32
-    [out2] :推論結果のtagName :str
+    ファイルをbase64にエンコードする
+    # GOOGLE_CLOUD_VISION_APIへ渡すときの指定がbase64 encodeのため
+    '''
+    with open(file_path, "rb") as f:
+        img_byte = f.read()
+    return base64.b64encode(img_byte)
 
-    [注意点]
-    ・画像の拡張子はjpg/jpeg, png, bmpに限る
-    ・画像サイズは4MBまで。
+
+def request_cloud_vison_api(image_base64):
     '''
-    # APIリクエスト・レスポンス取得
+    base64エンコード済の画像ファイルを受け取り、Google Cloud Vision APIを用いてオブジェクトの推論を行う関数
+    [in]   :base64エンコード済の画像ファイル
+    [out1] :推論結果の確信度（result['score']）--float32
+    [out2] :推論結果のanimal_name（result['name']）--str
+    '''
+    api_url = GOOGLE_CLOUD_VISION_API_URL + '?key='+ GCV_API_KEY
+    req_body = json.dumps({
+        'requests': [{
+            'image': {
+                'content': image_base64.decode('utf-8')
+            },
+            'features': [{
+                'maxResults': GCV_API_NUM_MAX_RESULTS,
+                'type': GCV_DETECTION_TYPE,
+            }]
+        }]
+    })
+    # API POST
     try:
-        conn = http.client.HTTPSConnection('southcentralus.api.cognitive.microsoft.com')
-        f = open(filepath, "rb", buffering=0)
-        conn.request("POST",
-                     "/customvision/v2.0/Prediction/2c3629e9-58dd-452c-adb4-616db4e98f3d/image?%s" % params,
-                     f.readall(), headers)
-        response = conn.getresponse()
-        data = response.read()
-        conn.close()
+        res = requests.post(api_url, data=req_body)
     except Exception as e:
         log.debug("[Errno {0}] {1}".format(e.errno, e.strerror))
+    
+    res_dict = res.json()
+    results = res_dict['responses'][0][GCV_DETECTION_RESULT_NAME]
+    animal_name = ''
+    max_score = 0
+    # ANIMAL_NAME_NO_DICTに名前がある and scoreが最大のアニマルをgetする
+    for result in results:
+        if result['name'] in ANIMAL_NAME_NO_DICT.keys():
+            if result['score'] > max_score:
+                animal_name = result['name']
+                max_score = result['score']
 
-    # json型データをロードし辞書型へ保存
-    custom_vision_output = json.loads(data)
-    # 辞書型からリストに入れなおす
-    prediction_lists = []
-    for prediction in custom_vision_output['predictions']:
-        prediction_lists.append([prediction['probability'], prediction['tagName']])
-    # 扱いやすいようnp.array型のリストへ変換
-    prediction_lists = np.array(prediction_lists)
-    # 0列目(probability)が最大の要素のindex番号を取得し、リストの要素を変数に入れる
-    probable_animal = prediction_lists[np.argmax(prediction_lists[:, 0].astype('float32'))]
-    probability = probable_animal[0].astype('float32')
-    tagName = probable_animal[1].astype('str')
-
-    return probability, tagName
+    return max_score, animal_name
 
 
 def allowed_file(filename):
@@ -203,7 +219,7 @@ def get_one_registered_animal_by_animal_no_and_register_user_id(animal_no, user_
     mydict = {}
     if record is None:
         mydict.setdefault('register_user_id', 'No Data')
-        mydict.setdefault('filepath',         '/static/images/no_image/no_image.png')
+        mydict.setdefault('filepath',          NO_IMAGE_PATH)
         mydict.setdefault('confidence',       'No Data')
         mydict.setdefault('animal_no',        'No Data')
         mydict.setdefault('timestamp',        'No Data')
@@ -281,44 +297,64 @@ def get_animal():
 
             # ファイルを保存
             # ランダム文字列なので重複はほぼありえない。（なお、もし同名のファイルがある場合、上書き保存する挙動）
-            cv2.imwrite('flaskwebapp' + file_path, resized_img)
+            cv2.imwrite('flaskwebapp'+ file_path, resized_img)
 
-            ## Azure Custom Vision APIを用いた推論
-            # APIを呼び出して推論実行
-            confidence, tagName = infer_by_custom_vision('flaskwebapp' + file_path)
+            # ## Azure Custom Vision APIを用いた推論
+            # # APIを呼び出して推論実行
+            # confidence, tagName = infer_by_custom_vision('flaskwebapp' + file_path)
 
-            # 紐付け用辞書を用いて推論結果のラベルを取得  #TODO:Custom Vision側のタグ名が変わるなら合わせて変える
-            label = labels_for_CV[tagName[:2]]
+            # # 紐付け用辞書を用いて推論結果のラベルを取得
+            # label = labels_for_CV[tagName[:2]]
 
-            # 推論結果のラベルを用いて、DBからアニマルデータ検索
-            search_string = label[:3]
-            record = animal_dict.query.filter_by(animal_no=search_string).first()
-
-            # 辞書型にアニマルデータを入れる
-            content = {}
-            content.setdefault('animal_no',    record.animal_no)
-            content.setdefault('animal_name',  record.animal_name)
-            content.setdefault('animal_type',  record.animal_type)
-            content.setdefault('body_length',  record.body_length)
-            content.setdefault('weight',       record.weight)
-            content.setdefault('description',  record.description)
-            content.setdefault('animal_a_tag', record.animal_a_tag)
+            ## Google Cloud Vision APIを用いた推論
+            image_b64 = convert_file_to_b64_string('flaskwebapp'+ file_path)
+            confidence, animal_name = request_cloud_vison_api(image_b64)
 
             ## toast(≒メッセージウインドウ)を表示するjavascript
-            if confidence >= 0.8:
-                # got animal
-                toast_js = "M.toast({html: 'やったー！', classes: 'amber darken-4'});" \
-                           "M.toast({html: '" + record.animal_name \
-                           + " をゲットした！', classes: 'amber darken-4'});"
+            if animal_name!='':
+                ## get animal
+                animal_no = ANIMAL_NAME_NO_DICT[animal_name]
 
-                return render_template('got_animal.html', file_path=file_path,
-                                       content=content, confidence=confidence, toast_js=toast_js)
+                # 推論結果のラベルを用いて、DBからアニマルデータ検索
+                record = animal_dict.query.filter_by(animal_no=animal_no).first()
+
+                # 辞書型にアニマルデータを入れる
+                content = {}
+                content.setdefault('animal_no',    record.animal_no)
+                content.setdefault('animal_name',  record.animal_name)
+                content.setdefault('animal_type',  record.animal_type)
+                content.setdefault('body_length',  record.body_length)
+                content.setdefault('weight',       record.weight)
+                content.setdefault('description',  record.description)
+                content.setdefault('animal_a_tag', record.animal_a_tag)
+                
+                if confidence >= SCORE_THRESH:
+                    # toast表示
+                    toast_js = "M.toast({html: 'やったー！', classes: 'amber darken-4'});" \
+                               "M.toast({html: '" + record.animal_name \
+                               + " をゲットした！', classes: 'amber darken-4'});"
+
+                    return render_template('got_animal.html', file_path=file_path,
+                                           content=content, confidence=confidence, toast_js=toast_js)
+                else:
+                    # escaped(animel_nameはある)
+                    toast_js = "M.toast({html: '逃げられた・・・', classes: 'grey darken-1'});"
+
+                    return render_template('escaped.html', file_path=file_path,
+                                           content=content, confidence=confidence, toast_js=toast_js)
+            
             else:
-                # animal escaped
+                ## escaped(animel_nameなし)
+                # 辞書型にアニマルデータを入れる
+                content = {}
+                content.setdefault('animal_no',   '―')
+                content.setdefault('animal_name', '')
+
                 toast_js = "M.toast({html: '逃げられた・・・', classes: 'grey darken-1'});"
 
                 return render_template('escaped.html', file_path=file_path,
                                        content=content, confidence=confidence, toast_js=toast_js)
+
 
         else:
             # 許可していない拡張子の場合（クライアントサイドでもjsでチェックするが、念の為サーバサイドでもチェックする）

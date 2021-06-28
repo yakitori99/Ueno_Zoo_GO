@@ -7,7 +7,7 @@ function howToGetClick() {
       // type: 'question',
        title: "アニマルをゲットするには"
       ,html: "<div style='text-align:left; margin-top: 1rem;'>" +
-            "確信度80%以上でアニマルをゲットできます。<br><br>" +
+            "確信度50%以上でアニマルをゲットできます。<br><br>" +
             "■確信度を上げるには<br>" +
             "画像の認識・分類はAIが自動で行います。<br>" +
             "以下を満たすとうまく認識されやすいので、チャレンジしてみてください。<br>" +
