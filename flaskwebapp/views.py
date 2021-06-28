@@ -459,7 +459,7 @@ def photo_library_show(selected_animal_no=None):
                            selected_animal_no=selected_animal_no)
 
 
-## publoc photos（メニューにはない、隠しページとする）
+## publoc photos（メニューにはない隠しページとする。存在する全画像を表示する）
 @app.route('/public_photos')
 def public_photos():
     file_paths = []
