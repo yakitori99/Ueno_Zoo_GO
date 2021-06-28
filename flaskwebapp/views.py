@@ -13,7 +13,7 @@ import glob
 import cv2
 
 # Azure Custom Vision API用
-import http.client, urllib.request, urllib.parse, urllib.error
+import http.client
 import json
 
 # ランダム文字列生成用
@@ -34,39 +34,20 @@ import flaskwebapp.logger as logger  # for test
 log = logger.Logger('test_log')  # for test
 # log.debug('test_debug_log')  # for debug
 
+import flaskwebapp.config as conf
 
-### 定数定義
+### 設定読み込み
 # ファイルアップロード先フォルダ
-UPLOAD_FOLDER = '/static/images'
+UPLOAD_FOLDER = conf.UPLOAD_FOLDER
 
 # アップロードを許可する拡張子
-ALLOWED_EXTENSIONS = set(['jpg', 'jpeg', 'png', 'bmp'])
+ALLOWED_EXTENSIONS = conf.ALLOWED_EXTENSIONS
 
 ## Azure Custom Vision API用  start
 # Custom Vision APIのtagNameと表示するanimalNoの紐付け用辞書
-labels_for_CV = {
-    '00': '001　ニホンザル',
-    '01': '002　パンダ',
-    '02': '003　カワウソ',
-    '03': '004　ゴリラ',
-    '04': '005　キリン',
-    '05': '006　カンガルー',
-    '06': '007　スマトラトラ',
-    '07': '008　アジアゾウ',
-    '08': '009　ケープペンギン',
-    '09': '010　レッサーパンダ'
-}
-
-headers = {
-    # Request headers
-    'Content-Type': 'application/octet-stream',
-    # 'Prediction-key': '5929d36d1b214cdb8651dce6ac9f4982', # Azreサブスクリプションへの移行前
-    'Prediction-key': '82c39469f0074a6e9c512ee6457b2d6a',
-}
-params = urllib.parse.urlencode({
-    # Request parameters
-    'iterationId': '1'
-})
+labels_for_CV = conf.labels_for_CV
+headers = conf.headers
+params = conf.params
 ## Azure Custom Vision API用  end
 
 ### グローバル処理

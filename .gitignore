@@ -275,7 +275,6 @@ target/
 
 
 ##########################################33
-# Add TT 2019/03/12
 # no_image以外の、画面操作で追加される画像ファイルはignore(GitHubに上げない)
 flaskwebapp/static/images/*
 !flaskwebapp/static/images/no_image/
@@ -285,3 +284,6 @@ flaskwebapp/static/images/*
 
 # 以下はWindowsで使うサポート的なツールなのでignore
 *.bat
+
+# configはignore
+/flaskwebapp/config.py
