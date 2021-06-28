@@ -442,7 +442,9 @@ def public_photos():
     file_names = glob.glob('flaskwebapp/static/images/*')
     for file_name in file_names:
         good_file_path = file_name.replace('flaskwebapp/', '')
-        file_paths.append(good_file_path)
+        # 許可された拡張子のファイルのみ処理
+        if allowed_file(good_file_path):
+            file_paths.append(good_file_path)
     ## 説明：
     # pythonのコマンド実行時は、runserver.pyの階層がカレントディレクトリになっている
     # →パス指定は、flaskwebapp/…から始める必要がある
