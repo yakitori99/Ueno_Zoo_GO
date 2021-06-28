@@ -1,12 +1,9 @@
 # coding: utf-8
 from flask import render_template, request, redirect, session
-# secure_filename:ファイル名のパス区切り文字、スラッシュ、さらにはパス内の非ASCII文字にいたるまでを取り去る（安全なファイル名にする）
-# from werkzeug import secure_filename
 import os
 import numpy as np
 from datetime import datetime as dt
 
-# Dockerイメージ作成 & Azureへデプロイして使うために必要らしい。ので入れる。
 from io import BytesIO
 
 # ファイル一覧取得用
@@ -412,8 +409,6 @@ def my_animal_index(selected_user_name=None):
     num_got_animal = num_all_animal - timestamp_list.count("No Data")
     # (捕まえた数)/(アニマル全種類数)の文字列
     str_num_animal = str(num_got_animal) + "/" + str(num_all_animal)
-    # log.debug(my_animals)  # debug
-    # log.debug(num_got_animal)  # debug
 
     ## user_namesのselectリスト生成用データ
     # 重複を除いてユーザ名(register_user_id)を全て取得し、リストへ格納
@@ -464,18 +459,15 @@ def photo_library_show(selected_animal_no=None):
 def public_photos():
     file_paths = []
     file_names = glob.glob('flaskwebapp/static/images/*')
-    # log.debug(file_names) # debug
     for file_name in file_names:
         good_file_path = file_name.replace('flaskwebapp/', '')
         file_paths.append(good_file_path)
-
     ## 説明：
     # pythonのコマンド実行時は、runserver.pyの階層がカレントディレクトリになっている
     # →パス指定は、flaskwebapp/…から始める必要がある
     # webからファイル参照などする場合は、views.pyの階層がカレントディレクトリになっている(通常のflaskWebアプリと同じ)
     # →パス指定は、static/…から始める必要がある
 
-    # log.debug(file_paths) # debug
     return render_template('public_photos.html', file_paths=file_paths)
 
 
