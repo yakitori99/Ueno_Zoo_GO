@@ -8,15 +8,15 @@ db_session.commit()
 
 # idには連番、timestampは日時が勝手に入る(models.pyのデフォルト設定により)
 # class名と初期化パラメータを指定して__init__()メソッドでインスタンス作成
-c1 = registered_animal("user1",
-                       "/static/images/kangaroo_test1.jpg",
+c1 = registered_animal("yasu",
+                       "/static/images/006_kangaroo_1.jpg",
                        "006",
-                       0.9111)
+                       0.8902)
 
-c2 = registered_animal("user1",
-                       "/static/images/penguin_test1.jpg",
+c2 = registered_animal("yasu",
+                       "/static/images/009_penguin_1.jpg",
                        "009",
-                       0.8111)
+                       0.8661)
 
 
 db_session.add(c1)  # insert実行
