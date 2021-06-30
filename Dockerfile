@@ -1,8 +1,6 @@
 ## Dockerfileには、ベースとするDockerイメージに対して実行する内容を記述します。
 # FROMで、ベースとするDockerイメージを指定します。
-#FROM kikagaku/handson:v3.0
 FROM tiangolo/uwsgi-nginx:python3.6
-
 
 # RUNは、OSのコマンドを実行する際に使用します。
 RUN mkdir /code
@@ -18,9 +16,9 @@ RUN pip install -r requirements.txt
 ADD . /code/
 
 ## ssh
-# ENV 命令は、環境変数 <key> と 値 <value> のセットです。
-# 以下のsshパスワードは、今回のDockerイメージのrootユーザで使うもの。
-ENV SSH_PASSWD "root:kikagaku"
+# MY_SSH_PASSWDはdocker build時に--build-arg オプションで指定
+ARG MY_SSH_PASSWD
+ENV SSH_PASSWD ${MY_SSH_PASSWD}
 RUN apt-get update \
         && apt-get install -y --no-install-recommends dialog \
         && apt-get update \
@@ -31,8 +29,6 @@ COPY sshd_config /etc/ssh/
 COPY init.sh /usr/local/bin/
 
 RUN chmod u+x /usr/local/bin/init.sh
-# EXPOSE 命令は、特定のネットワーク・ポートをコンテナが実行時にリッスンすることを Docker に伝えます。
-EXPOSE 5000 2222
 
 # ENTRYPOINT はコンテナが実行するファイルを設定します。
 ENTRYPOINT ["init.sh"]
