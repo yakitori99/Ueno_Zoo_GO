@@ -3,16 +3,18 @@
 
 <!-- Select, 捕まえた数 & medalエリア -->
 <div class="row"  style="margin-top:25px; margin-left:5%; margin-right:5%;">
+  <div class="row div_label_on_select">
+    <label class="col s10 m6 l4">アニマル図鑑を見る</label>
+  </div>
   <!-- Selectエリア -->
-  <div class="input-field col s10 m4 l4">
+  <div class="input-field col s10 m6 l4 div_select_under_label">
     <!-- onchangeイベントで、指定されたURLへジャンプ -->
-    <select onchange="location.href = this[this.selectedIndex].value;">
+    <select onchange="location.href = this[this.selectedIndex].value;" class="browser-default select_under_label">
       <option value="" disabled selected>ニックネームを選択</option>
       {% for user_name in user_names %}
         <option value="my_animal_index/{{user_name}}">{{user_name}}</option>
       {% endfor %}
     </select>
-    <label>アニマル図鑑を見る</label>
   </div>
 </div>
 {% endblock %}

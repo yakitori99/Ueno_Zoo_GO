@@ -227,3 +227,46 @@ userAgentChecker.jsが行って、htmlタグのclassへ追加してくれる */
     background: #80deea;
 } */
 /* アコーディオン用 END -------------------------------------------------------------------------------- */
+
+/* ドロップダウン/ドロップダウン用label START -------------------------------------------------------------------------------- */
+.div_label_on_select{
+    margin-bottom: 0%;
+    margin-left: 3px;
+}
+
+.div_select_under_label{
+    margin-top: 0%;
+}
+
+/* ドロップダウンリスト_デフォルトの矢印の代わりにシンプルな矢印 */
+.div_select_under_label::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border: 0px;
+    border-bottom: solid 2px #b4b3b3;
+    border-right: solid 2px #b4b3b3;
+    -ms-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    margin-top: -4px;
+  }
+
+.select_under_label{
+    /* ドロップダウンリスト_デフォルトの矢印を無効化 start */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* ドロップダウンリスト_デフォルトの矢印を無効化 end */
+    font-size: 16px;
+    padding:0%;
+    cursor: pointer;
+    background-color: transparent;
+    border:none;
+    border-bottom: 1px solid #00b8d4;
+}
+
+/* ドロップダウン/ドロップダウン用label END -------------------------------------------------------------------------------- */

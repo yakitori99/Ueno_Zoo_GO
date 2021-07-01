@@ -3,16 +3,18 @@
 
 <!-- Selectエリア -->
 <div class="row"  style="margin-top:25px; margin-left:5%; margin-right:5%;">
+  <div class="row div_label_on_select">
+    <label class="col s10 m6 l4">アニマルを見る</label>
+  </div>
   <!-- Selectエリア -->
-  <div class="input-field col s10 m4 l4">
+  <div class="input-field col s10 m6 l4 div_select_under_label">
     <!-- onchangeイベントで、指定されたURLへジャンプ。script.jsで、前回選択されたvalueを初期選択する -->
-    <select id="animal_no_selecter" onchange="location.href = this[this.selectedIndex].value;">
+    <select id="animal_no_selecter" onchange="location.href = this[this.selectedIndex].value;" class="browser-default select_under_label">
       <option value="" disabled>アニマルを選択</option>
       {% for dict_animal in dict_animals %}
         <option value="{{dict_animal['animal_no']}}">No.{{dict_animal['animal_no']}} {{dict_animal['animal_name']}}</option>
       {% endfor %}
     </select>
-    <label>アニマルを見る</label>
     <input type="hidden" id="selected_animal_no" value="{{selected_animal_no}}" >
   </div>
 </div>
