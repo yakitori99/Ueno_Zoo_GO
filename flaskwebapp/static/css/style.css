@@ -267,3 +267,30 @@ userAgentChecker.jsが行って、htmlタグのclassへ追加してくれる */
 }
 
 /* ドロップダウン/ドロップダウン用label END -------------------------------------------------------------------------------- */
+
+/* pagination用 START -------------------------------------------------------------------------------- */
+/* pagination用の全要素を上下中央揃えとする */
+.paginate_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.paginate_center li{
+    vertical-align: middle;
+}
+.paginate_center i{
+    vertical-align: middle;
+}
+
+
+/* 現在のページ番号の色 */
+.pagination li.active{
+    background-color: #00b8d4;
+}
+
+/* 要素をクリック不可とする */
+.pointer_events_none{
+    pointer-events: none;
+}
+/* pagination用 END -------------------------------------------------------------------------------- */

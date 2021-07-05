@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, session
 import os
 import numpy as np
 from datetime import datetime as dt
+import math
 
 from io import BytesIO
 
@@ -61,6 +62,8 @@ GCV_DETECTION_RESULT_NAME = conf.GCV_DETECTION_RESULT_NAME
 GCV_API_NUM_MAX_RESULTS = conf.GCV_API_NUM_MAX_RESULTS
 ## for GoogleCloudVisionAPI end
 
+## for Paginage
+NUM_PER_PAGE_PHOTO_LIBRARY = conf.NUM_PER_PAGE_PHOTO_LIBRARY
 
 ### 関数定義
 def convert_file_to_b64_string(file_path):
@@ -233,18 +236,26 @@ def get_one_registered_animal_by_animal_no_and_register_user_id(animal_no, user_
     return mydict
 
 
-def get_registered_animals_by_animal_no(animal_no):
+def get_registered_animals_by_animal_no(animal_no, page):
     '''
     registered_animal からanimal_noを条件にデータを検索し、
     timestampの降順にソートして、辞書をリストに格納してリストを返す
+    -- 1ページあたりの表示件数分のみ取得する
     ※検索結果が0件の場合はとりあえず考慮しない（初期データとして、必ず1アニマル1件以上登録するため）
     [in1] :animal_no
-    [out] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    [in2] :page--表示するページ番号(int, 1スタート)
+    [out1] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    [out2] :num_records--DB内の一致するレコード数
     '''
+    # 1ページあたりの表示件数
+    num_per_page = NUM_PER_PAGE_PHOTO_LIBRARY
+
     records = db_session.query(registered_animal
                                ).filter(text('animal_no = :animal_no')
                                         ).params(animal_no=animal_no
-                                                 ).order_by(desc(registered_animal.timestamp))
+                                                 ).order_by(desc(registered_animal.timestamp)
+                                                            ).limit(num_per_page
+                                                                    ).offset((page-1)*num_per_page)
 
     contents = []  # このリストの各行に、registered_animalの辞書型データを入れる
     for record in records:
@@ -257,17 +268,31 @@ def get_registered_animals_by_animal_no(animal_no):
         mydict.setdefault('timestamp',        record.timestamp.strftime('%Y/%m/%d'))
         contents.append(mydict)
 
-    return contents
+    # 件数を取得
+    num_records = db_session.query(registered_animal
+                                   ).filter(text('animal_no = :animal_no')
+                                            ).params(animal_no=animal_no
+                                                     ).count()
+    return contents, num_records
 
-def get_registered_animals_all():
+
+def get_registered_animals_all(page):
     '''
     registered_animal から全てのデータを検索し、
     timestampの降順にソートして、辞書をリストに格納してリストを返す
+    -- 1ページあたりの表示件数分のみ取得する
     ※検索結果が0件の場合はとりあえず考慮しない（初期データとして、必ず1アニマル1件以上登録するため）
-    [out] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    [in]  :page--表示するページ番号(int, 1スタート)
+    [out1] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    [out2] :num_records--DB内の一致するレコード数
     '''
+    # 1ページあたりの表示件数
+    num_per_page = NUM_PER_PAGE_PHOTO_LIBRARY
+    # 表示するページの要素を取得
     records = db_session.query(registered_animal
-                               ).order_by(desc(registered_animal.timestamp))
+                               ).order_by(desc(registered_animal.timestamp)
+                                          ).limit(num_per_page
+                                                  ).offset((page-1)*num_per_page)
 
     contents = []  # このリストの各行に、registered_animalの辞書型データを入れる
     for record in records:
@@ -280,7 +305,10 @@ def get_registered_animals_all():
         mydict.setdefault('timestamp',        record.timestamp.strftime('%Y/%m/%d'))
         contents.append(mydict)
 
-    return contents
+    # 件数を取得
+    num_records = db_session.query(registered_animal).count()
+
+    return contents, num_records
 
 
 ### URLアクセス時の処理定義
@@ -465,13 +493,15 @@ def my_animal_index(selected_user_name=None):
 @app.route('/photo_library')
 def photo_library_search():
     # フォトライブラリは、デフォルトで全アニマルを検索する
-    # - '/photo_library'への遷移は'/photo_library/ALL'へリダイレクトする
-    return redirect('/photo_library/ALL')
+    # - '/photo_library'への遷移は'/photo_library/ALL/1'へリダイレクトする
+    return redirect('/photo_library/ALL/1')
 
 
 ### フォトライブラリ　アニマル表示
-@app.route('/photo_library/<selected_animal_no>')
-def photo_library_show(selected_animal_no=None):
+@app.route('/photo_library/<selected_animal_no>/<page>')
+def photo_library_show(selected_animal_no=None, page=1):
+    page = int(page)
+
     ## animalsのselectリスト生成用データ
     # animal_dictのリストを取得
     dict_animals = get_animal_dict_order_by_animal_no()
@@ -479,15 +509,34 @@ def photo_library_show(selected_animal_no=None):
     # URLの末尾(/より後ろ)から'ALL'またはselected_animal_no（アニマルNo）を取得
     if selected_animal_no == 'ALL':
         # 'ALL'ならば全アニマルを取得
-        registered_animals = get_registered_animals_all()
+        registered_animals, num_records = get_registered_animals_all(page)
 
     else:
         # アニマルNoをキーにでregistered_animalテーブルを検索
-        registered_animals = get_registered_animals_by_animal_no(selected_animal_no)
+        registered_animals, num_records = get_registered_animals_by_animal_no(selected_animal_no, page)
+    
+    # 表示するページ番号
+    num_pages = math.ceil(num_records/NUM_PER_PAGE_PHOTO_LIBRARY)
+    # ページネーションは5つまで表示する
+    if num_pages <= 5:
+        p_start = 1
+        p_end   = num_pages
+    else:
+        if page <= 3:
+            p_start = 1
+            p_end   = 5
+        elif num_pages-2 <= page:
+            p_start = num_pages-4
+            p_end   = num_pages
+        else:
+            p_start = page-2
+            p_end   = page+2
 
     return render_template('photo_library_show.html',
                            dict_animals=dict_animals, registered_animals=registered_animals,
-                           selected_animal_no=selected_animal_no)
+                           selected_animal_no=selected_animal_no,
+                           page=page, num_pages=num_pages,
+                           p_start=p_start, p_end=p_end)
 
 
 ## publoc photos（メニューにはない隠しページとする。存在する全画像を表示する）
