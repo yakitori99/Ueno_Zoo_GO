@@ -259,6 +259,29 @@ def get_registered_animals_by_animal_no(animal_no):
 
     return contents
 
+def get_registered_animals_all():
+    '''
+    registered_animal から全てのデータを検索し、
+    timestampの降順にソートして、辞書をリストに格納してリストを返す
+    ※検索結果が0件の場合はとりあえず考慮しない（初期データとして、必ず1アニマル1件以上登録するため）
+    [out] :registered_animalの複数件（辞書型を要素に持つリスト、中身は全てstr））
+    '''
+    records = db_session.query(registered_animal
+                               ).order_by(desc(registered_animal.timestamp))
+
+    contents = []  # このリストの各行に、registered_animalの辞書型データを入れる
+    for record in records:
+        mydict = {}
+        mydict.setdefault('id',               record.id)
+        mydict.setdefault('register_user_id', record.register_user_id)
+        mydict.setdefault('filepath',         record.filepath)
+        mydict.setdefault('confidence',       '{:.2%}'.format(record.confidence))
+        mydict.setdefault('animal_no',        record.animal_no)
+        mydict.setdefault('timestamp',        record.timestamp.strftime('%Y/%m/%d'))
+        contents.append(mydict)
+
+    return contents
+
 
 ### URLアクセス時の処理定義
 ## / (Home)
@@ -299,14 +322,7 @@ def get_animal():
             # ランダム文字列なので重複はほぼありえない。（なお、もし同名のファイルがある場合、上書き保存する挙動）
             cv2.imwrite('flaskwebapp'+ file_path, resized_img)
 
-            # ## Azure Custom Vision APIを用いた推論
-            # # APIを呼び出して推論実行
-            # confidence, tagName = infer_by_custom_vision('flaskwebapp' + file_path)
-
-            # # 紐付け用辞書を用いて推論結果のラベルを取得
-            # label = labels_for_CV[tagName[:2]]
-
-            ## Google Cloud Vision APIを用いた推論
+            # Google Cloud Vision APIを用いた推論
             image_b64 = convert_file_to_b64_string('flaskwebapp'+ file_path)
             confidence, animal_name = request_cloud_vison_api(image_b64)
 
@@ -448,11 +464,9 @@ def my_animal_index(selected_user_name=None):
 ### フォトライブラリ　アニマル選択
 @app.route('/photo_library')
 def photo_library_search():
-    ## animalsのselectリスト生成用データ
-    # animal_dictのリストを取得
-    dict_animals = get_animal_dict_order_by_animal_no()
-
-    return render_template('photo_library_search.html', dict_animals=dict_animals)
+    # フォトライブラリは、デフォルトで全アニマルを検索する
+    # - '/photo_library'への遷移は'/photo_library/ALL'へリダイレクトする
+    return redirect('/photo_library/ALL')
 
 
 ### フォトライブラリ　アニマル表示
@@ -462,9 +476,14 @@ def photo_library_show(selected_animal_no=None):
     # animal_dictのリストを取得
     dict_animals = get_animal_dict_order_by_animal_no()
 
-    # URLの末尾(/より後ろ)からselected_animal_no（アニマルNo）を取得
-    # アニマルNoをキーにでregistered_animalテーブルを検索
-    registered_animals = get_registered_animals_by_animal_no(selected_animal_no)
+    # URLの末尾(/より後ろ)から'ALL'またはselected_animal_no（アニマルNo）を取得
+    if selected_animal_no == 'ALL':
+        # 'ALL'ならば全アニマルを取得
+        registered_animals = get_registered_animals_all()
+
+    else:
+        # アニマルNoをキーにでregistered_animalテーブルを検索
+        registered_animals = get_registered_animals_by_animal_no(selected_animal_no)
 
     return render_template('photo_library_show.html',
                            dict_animals=dict_animals, registered_animals=registered_animals,
