@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- 全体の背景 START -->
+<div class="get-bg-div get-bg-image">
+
 <!-- ファイル選択エリア -->
 <div class="row">
   <div class="col s10 offset-s1">
@@ -10,7 +13,7 @@
           <input type="file" name="file" id="get_animal_file">
         </div>
         <div class="file-path-wrapper col s6 m8">
-          <input id="get_animal_textbox" class="file-path validate" type="text" required style="font-size: 1rem;" placeholder="動物の写真を選択　または　ドラッグ＆ドロップしてください">
+          <input id="get_animal_textbox" class="file-path validate" type="text" required style="font-size: 1rem;" placeholder="動物の写真を選択 または ドラッグ＆ドロップしてください">
         </div>
         <div class="col s2">
           <button id="get_animal_button" class="btn-large waves-effect waves-light cyan accent-4" form="upload_img" type="submit" value="file">Get
@@ -41,5 +44,7 @@
     <!-- ローディングアイコン END -->
   </div>
 </div>
+
+</div><!-- 全体の背景 END -->
 
 {% endblock %}

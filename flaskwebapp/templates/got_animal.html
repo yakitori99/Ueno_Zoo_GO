@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- 全体の背景 START -->
+<div class="get-bg-div get-bg-image">
+
 <!-- ファイル選択エリア -->
 <div class="row">
   <div class="col s10 offset-s1">
@@ -43,17 +46,19 @@
 </div>
 
 
+<!-- アニマル図鑑 & 登録するエリア 全体 START -->
+<div class="get-bg-white">
+
 <!-- アニマル図鑑エリア -->
 <div class="row">
   <!-- アニマル図鑑の画像部分 -->
-  <div class="col s10 offset-s1 m5 offset-m1">
-    <!-- <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: cover;" alt="アップロード画像"> -->
+  <div class="col s12 m6">
     <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: contain;" alt="アップロード画像">
   </div>
 
 
   <!-- アニマル図鑑の説明部分を表示 -->
-  <div class="col s10 m5 offset-s1 ">
+  <div class="col s12 m6">
     <h4 style="margin-top: 0px;"><b>No.{{content['animal_no']}} {{content['animal_name']}}</b></h4>
     <h5><b>体長 </b>{{content['body_length']}}<b>　重さ </b>{{content['weight']}}</h5>
 
@@ -70,22 +75,21 @@
 
 <!-- このアニマルを図鑑へ登録するエリア -->
 <div class="row">
-  <div class="col s10 offset-s1">
+  <div class="col s12" style="margin-bottom: 10px;">
 
-    <div class="divider blue-grey lighten-2" style="margin-top:10px;margin-bottom:10px;"></div>
+    <div class="divider cyan accent-4" style="margin-top:10px;margin-bottom:10px;"></div>
 
     <div class="col s12 m6">
       <h5><b>図鑑に登録しますか？</b></h5>
-      <p class="supplement_text">※登録した写真は全ユーザに公開されます。</p>
+      <p style="color: #666666; font-size: 80%;">※登録した写真は全ユーザに公開されます。</p>
     </div>
 
-    <!-- <div class="col s12 m6"> -->
     <form id="register_animal" action="/register" method="post" enctype="multipart/form-data">
       <div class="col s12 m4">
         <div class="input-field">
           <i class="material-icons prefix amber-text text-darken-4">account_circle</i>
           <input id="input_text" type="text" class="validate" name="register_user_id" data-length="10" maxlength="10" required>
-          <label for="input_text">ニックネーム（必須）</label>
+          <label for="input_text" style="color: #666666;">ニックネーム（必須）</label>
         </div>
         <input type="hidden" name="animal_no" value={{content['animal_no']}} >
         <input type="hidden" name="animal_name" value={{content['animal_name']}} >
@@ -98,5 +102,9 @@
 
   </div>
 </div>
+
+</div><!-- アニマル図鑑 & 登録するエリア 全体 END -->
+
+</div><!-- 全体の背景 END -->
 
 {% endblock %}

@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- 全体の背景 START -->
+<div class="get-bg-div get-bg-image">
+
 <!-- ファイル選択エリア -->
 <div class="row">
   <div class="col s10 offset-s1">
@@ -43,17 +46,19 @@
 </div>
 
 
+<!-- アニマル図鑑 & 登録するエリア 全体 START -->
+<div class="get-bg-white">
+
 <!-- アニマル図鑑エリア -->
 <div class="row">
   <!-- アニマル図鑑の画像部分 -->
-  <div class="col s10 offset-s1 m5 offset-m1">
-    <!-- <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: cover;" alt="アップロード画像"> -->
+  <div class="col s12 m6">
     <img id="upload_img" class="responsive-img" src="{{file_path}}" style="width: 250%; height: auto; max-height: 60vmin; object-fit: contain;" alt="アップロード画像">
   </div>
 
 
   <!-- アニマル図鑑の説明部分を表示 -->
-  <div class="col s10 m5 offset-s1 ">
+  <div class="col s12 m6">
     <h4 style="margin-top: 0px;"><b>No.{{content['animal_no']}} {{content['animal_name']}}</b></h4>
     <h5><i class="far fa-lightbulb icon_margin grey-text text-darken-1"></i><b>確信度　</b>{{'{:.2%}'.format(confidence)}}</h5>
   </div>
@@ -61,11 +66,11 @@
 
 <!-- 逃げられた後の説明エリア -->
 <div class="row">
-  <div class="col s10 offset-s1">
+  <div class="col s12" style="margin-bottom: 10px;">
 
-    <div class="divider blue-grey lighten-2" style="margin-top:10px;margin-bottom:10px;"></div>
+    <div class="divider cyan accent-4" style="margin-top:10px;margin-bottom:10px;"></div>
 
-    <div class="col s12 ">
+    <div class="col s12">
       <h5>
         アニマルをゲットするには
         <a href="javascript:void(0)"><i class="far fa-question-circle fa-lg cyan-text text-accent-4" onclick="howToGetClick()"></i></a>
@@ -74,5 +79,9 @@
 
   </div>
 </div>
+
+</div><!-- アニマル図鑑 & 登録するエリア 全体 END -->
+
+</div><!-- 全体の背景 END -->
 
 {% endblock %}
