@@ -76,7 +76,7 @@ nav ul i {
   margin-block-end: 0.3em;
 }
 
-/* my_animal_index メダル、トロフィー、リボンの色 */
+/* my_animal_index メダル、トロフィーの色 */
 .medal_bronze{
   color: #e79974;
 }
@@ -88,9 +88,6 @@ nav ul i {
 }
 .trophy_color{
   color: #f2e941;
-}
-.ribbon_color{
-  color: #ef7973;
 }
 
 /* cardレイアウト用 START ------------------------------------------------------------------- */
