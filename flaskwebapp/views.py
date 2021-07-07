@@ -312,19 +312,13 @@ def get_registered_animals_all(page):
 
 
 ### URLアクセス時の処理定義
-## / (Home)
+## / (Home) # TOPページとAboutページを統合した
 @app.route('/')
 def home():
-    return render_template('home.html')
-
-
-## /about
-@app.route('/about')
-def about():
     return render_template('about.html')
 
 
-## / (get_animal)
+## GET画面 -> got, escapedへ遷移する
 @app.route('/get', methods=['GET', 'POST'])
 def get_animal():
     if request.method == 'POST':
@@ -539,7 +533,7 @@ def photo_library_show(selected_animal_no=None, page=1):
                            p_start=p_start, p_end=p_end)
 
 
-## publoc photos（メニューにはない隠しページとする。存在する全画像を表示する）
+## publoc_photos（メニューにはないページとする。存在する全画像を表示する）
 @app.route('/public_photos')
 def public_photos():
     file_paths = []
