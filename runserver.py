@@ -10,9 +10,11 @@ if __name__ == '__main__':
     port_env = os.getenv('PORT')
     if port_env is None:
         # debug用
-        port_num = 80
+        port_num = 8080
+        app.config['use_https'] = False
         app.run(debug=True,  host='0.0.0.0', port=port_num, threaded=True)
     else:
-        # heroku用
+        # heroku/AWS用
         port_num = int(port_env)
+        app.config['use_https'] = True
         app.run(debug=False, host='0.0.0.0', port=port_num, threaded=True)

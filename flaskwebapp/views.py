@@ -1,5 +1,5 @@
 # coding: utf-8
-from flask import render_template, request, redirect, session
+from flask import render_template, request, redirect, session, url_for
 import os
 import numpy as np
 from datetime import datetime as dt
@@ -66,6 +66,14 @@ GCV_API_NUM_MAX_RESULTS = conf.GCV_API_NUM_MAX_RESULTS
 NUM_PER_PAGE_PHOTO_LIBRARY = conf.NUM_PER_PAGE_PHOTO_LIBRARY
 
 ### 関数定義
+def get_scheme():
+    # httpかhttpsのどちらを使うか、configの値によって設定
+    if app.config['use_https'] is True:
+        scheme = 'https'
+    else:
+        scheme = 'http'
+    return scheme
+
 def convert_file_to_b64_string(file_path):
     '''
     ファイルをbase64にエンコードする
@@ -429,7 +437,8 @@ def register():
     session['toast_js_registered'] = toast_js
 
     # 登録したユーザ名の、アニマル図鑑画面へ遷移
-    return redirect('my_animal_index/' + register_user_id)
+    return redirect(url_for('my_animal_index', _external=True, _scheme=get_scheme(),
+                            selected_user_name=register_user_id))
 
 
 ### アニマル図鑑　ニックネーム選択（ユーザ選択）
@@ -488,7 +497,8 @@ def my_animal_index(selected_user_name=None):
 def photo_library_search():
     # フォトライブラリは、デフォルトで全アニマルを検索する
     # - '/photo_library'への遷移は'/photo_library/ALL/1'へリダイレクトする
-    return redirect('/photo_library/ALL/1')
+    return redirect(url_for('photo_library_show', _external=True, _scheme=get_scheme(),
+                            selected_animal_no='ALL', page='1'))
 
 
 ### フォトライブラリ　アニマル表示
