@@ -15,17 +15,6 @@ ADD requirements.txt /code/
 RUN pip install -r requirements.txt
 ADD . /code/
 
-# del ssh for heroku
-# ## ssh
-# # MY_SSH_PASSWDはdocker build時に--build-arg オプションで指定
-# ARG MY_SSH_PASSWD
-# ENV SSH_PASSWD ${MY_SSH_PASSWD}
-# RUN apt-get update \
-#         && apt-get install -y --no-install-recommends dialog \
-#         && apt-get update \
-#         && apt-get install -y --no-install-recommends openssh-server \
-#         && echo "$SSH_PASSWD" | chpasswd
-# COPY sshd_config /etc/ssh/
 COPY init.sh /usr/local/bin/
 
 RUN chmod u+x /usr/local/bin/init.sh
