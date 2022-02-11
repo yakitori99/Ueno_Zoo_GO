@@ -14,21 +14,6 @@ function howToGetClick() {
             "・余計なものが写り込まないようにする<br>" +
             "・正面または側面から撮る<br>" +
             "・鮮明に撮る" +
-            "<br><br>" +
-            "■認識できる動物一覧など<br>" +
-            "<a href='/about' style='text-decoration: underline;'>About</a>" +
-            // "■認識できる動物<br>" +
-            // "現在認識できる動物は以下の10種類です。<br>" +
-            // "No.001 ニホンザル<br>" +
-            // "No.002 パンダ<br>" +
-            // "No.003 カワウソ<br>" +
-            // "No.004 ゴリラ<br>" +
-            // "No.005 キリン<br>" +
-            // "No.006 カンガルー<br>" +
-            // "No.007 スマトラトラ<br>" +
-            // "No.008 アジアゾウ<br>" +
-            // "No.009 ケープペンギン<br>" +
-            // "No.010 レッサーパンダ" +
             "<div>"
       ,confirmButtonText: 'OK'
       ,confirmButtonColor: '#00b8d4'
