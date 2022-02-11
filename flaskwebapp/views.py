@@ -2,7 +2,7 @@
 from flask import render_template, request, redirect, session, url_for
 import os
 import numpy as np
-from datetime import datetime as dt
+import datetime
 import math
 
 from io import BytesIO
@@ -424,7 +424,9 @@ def register():
     filepath         = request.form['register_filepath']
     animal_no        = request.form['animal_no']
     confidence       = float(request.form['confidence'])
-    timestamp        = dt.now()
+    # UTCを日本時間に変換(処理するPC/サーバの時刻に関わらず、日本時間を取得)
+    timestamp = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+
     # インサート
     record = registered_animal(register_user_id, filepath, animal_no, confidence, timestamp)
     db_session.add(record)
