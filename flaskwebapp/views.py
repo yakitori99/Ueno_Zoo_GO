@@ -110,15 +110,18 @@ def request_cloud_vison_api(image_base64):
         log.debug("[Errno {0}] {1}".format(e.errno, e.strerror))
     
     res_dict = res.json()
-    results = res_dict['responses'][0][GCV_DETECTION_RESULT_NAME]
+
     animal_name = ''
     max_score = 0
-    # ANIMAL_NAME_NO_DICTに名前がある and scoreが最大のアニマルをgetする
-    for result in results:
-        if result['name'] in ANIMAL_NAME_NO_DICT.keys():
-            if result['score'] > max_score:
-                animal_name = result['name']
-                max_score = result['score']
+    # 結果が存在しない場合はデフォルト値をリターン
+    if 'responses' in res_dict.keys() and len(res_dict['responses']) >= 1 and GCV_DETECTION_RESULT_NAME in res_dict['responses'][0].keys():
+        results = res_dict['responses'][0][GCV_DETECTION_RESULT_NAME]
+        # 結果が存在する場合、ANIMAL_NAME_NO_DICTに名前がある and scoreが最大のアニマルをgetする
+        for result in results:
+            if result['name'] in ANIMAL_NAME_NO_DICT.keys():
+                if result['score'] > max_score:
+                    animal_name = result['name']
+                    max_score = result['score']
 
     return max_score, animal_name
 
