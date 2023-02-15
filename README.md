@@ -13,7 +13,8 @@
 <br>
 
 ## サイトURL
-https://www.ueno-zoo-go.tk/
+https://www.ueno-zoo-go.tk/  
+(現在は停止中です)
 <br>
 
 ## 構成図
